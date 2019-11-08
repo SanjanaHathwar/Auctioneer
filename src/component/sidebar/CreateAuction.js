@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Create from '../../assets/icons/createauction1.png'
-import { TextField,Dialog,DialogActions,DialogContent,DialogTitle,Button, Divider, StepLabel } from '@material-ui/core/';
+import { Dialog,DialogContent,DialogTitle,Button, Divider, StepLabel } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
-import { getItem } from '../../action/auctionAction';
+import { getItem, getBidders } from '../../action/auctionAction';
 import { connect } from 'react-redux'
 import Step1 from './Step1';
+import Step2 from './Step2';
 
 
 const useStyles = makeStyles({
@@ -39,7 +40,7 @@ function getStepContent(stepIndex) {
         case 0:
             return <Step1/>;
         case 1:
-            return 'What is an ad group anyways?';
+            return <Step2/>;
         case 2:
             return 'This is the bit I really care about!';
         default:
@@ -47,7 +48,7 @@ function getStepContent(stepIndex) {
     }
 }
   
-const CreateAuction = ({getItem}) => {
+const CreateAuction = ({getItem,getBidders}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
@@ -73,7 +74,8 @@ const CreateAuction = ({getItem}) => {
     //call item action
     useEffect(()=>{
         getItem()
-    },[getItem])
+        getBidders()
+    },[getItem,getBidders],[])
 
     
     return (
@@ -120,15 +122,20 @@ const CreateAuction = ({getItem}) => {
                     ) : (
                     <div>
                         {getStepContent(activeStep)}
-                        <div>
-                        <Button
-                            disabled={activeStep === 0}
-                            onClick={handleBack}
-                            className={classes.backButton}
-                        >
-                            Back
-                        </Button>
-                        <Button variant="contained" color="primary" onClick={handleNext}>
+                        <div style={{float:"right"}}>
+                        {
+                            activeStep === 0 ? null :
+                                <Button
+                                    style={{width:100}}
+                                    
+                                    onClick={handleBack}
+                                >
+                                    Back
+                                </Button>
+
+                        }
+                        
+                        <Button style={{width:280,marginTop:activeStep === 0 ? -80 : 0}} variant="contained" color="primary" onClick={handleNext}>
                             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                         </Button>
                         </div>
@@ -144,10 +151,11 @@ const CreateAuction = ({getItem}) => {
 
 CreateAuction.propTypes = {
     getItem : PropTypes.func.isRequired,
+    getBidders: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-
+    
 })
 
-export default connect(mapStateToProps,{getItem})(CreateAuction)
+export default connect(mapStateToProps,{getItem,getBidders})(CreateAuction)

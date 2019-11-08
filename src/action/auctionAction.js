@@ -1,4 +1,4 @@
-import { CREATE_AUCTION, GET_ITEM,GET_ITEM_FAIL } from "./type";
+import { CREATE_AUCTION, GET_ITEM,GET_ITEM_FAIL, GET_BIDDERS,GET_BIDDERS_FAIL } from "./type";
 import Axios from "axios";
 
 export const getItem = () => async dispatch =>{
@@ -13,5 +13,20 @@ export const getItem = () => async dispatch =>{
             type: GET_ITEM_FAIL,
             
         })
+    }
+}
+
+export const getBidders = () =>async dispatch => {
+    try {
+        const res = await Axios.get(`/supplier/fetchAll`)
+        dispatch({
+            type: GET_BIDDERS,
+            payload: res.data
+        })
+    } catch (error) {
+        dispatch({
+            type: GET_BIDDERS_FAIL
+        })
+        
     }
 }

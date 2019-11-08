@@ -3,4 +3,6 @@ export const GET_NOTIFICATION = "GET_NOTIFICATION";
 export const GET_ALL_AUCTIONS = "GET_ALL_AUCTIONS";
 export const CREATE_AUCTION = "CREATE_AUCTION";
 export const GET_ITEM = "GET_ITEM";
-export const GET_ITEM_FAIL = "GET_ITEM_FAIL"
+export const GET_ITEM_FAIL = "GET_ITEM_FAIL";
+export const GET_BIDDERS = "GET_BIDDERS";
+export const GET_BIDDERS_FAIL = "GET_BIDDERS_FAIL"
