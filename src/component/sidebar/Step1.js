@@ -1,42 +1,63 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Grid, TextField, Button } from '@material-ui/core'
+import { Grid, TextField  } from '@material-ui/core'
 import { connect } from 'react-redux'
-import Select from 'react-select';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, TimePicker, DatePicker } from '@material-ui/pickers';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import moment from 'moment'
+
 
 
 const Step1 = ({auction : {items}}) => {
+    const [values,setValues ] = React.useState({
+        item: '',
+        minDecrement: '',
+        startingPrice : '',
+        date:'',
+        time: '',
+        pickup:'',
+        drop: '',
+        auctionId:''
+    })
+    const [item,setItem] = React.useState("")
+
     const selectStyles = {
         menu: base => ({
           ...base,
           zIndex: 100
         })
     }
+    const handleTime = (date) => {
+        moment.locale()
+         
+        sessionStorage.setItem("startTime", date);
+        let y = moment(date).format('HH:mm')
+        setValues({time:date})
+    }
 
     return (
-        <div>
+        <div>{console.log(item)}
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container spacing={1} >
                 <Grid item xs>
-                    <Select
-                        style={{background:"transparent"}}
-                        className="select"
-                        styles={selectStyles}
-                        options={items.map(suggestion => ({
-                                    value: suggestion.itemId,
-                                    label: suggestion.itemName,
-                                }))}     
-
-                        // onChange={this.handleSelect}
-                        name="single"
-                        placeholder="Enter product"
-                        isClearable
+                    <Autocomplete
+                        options={items}
+                        getOptionLabel={items => items.itemName}
+                       
+                        onChange={(event, newValue) => {
+                            newValue=== null ? 
+                            setItem("") :setItem(newValue.itemId);
+                        }}
+                        style={{ width: 300 }}
+                        renderInput={params => (
+                            <TextField {...params} label="Enter product" variant="outlined" fullWidth margin="none"/>
+                        )}
                     />
                 </Grid>
                 <Grid item xs>
                     <TextField
+                        onChange = {(e)=>setValues({auctionId:e.target.value}) }
                         type="text" 
                         id="auctionId" 
                         label = "Auction Id"
@@ -50,15 +71,17 @@ const Step1 = ({auction : {items}}) => {
             <Grid container spacing={1}>
                 <Grid item xs>
                     <TextField
+                        onChange = {(e)=>setValues({pickup:e.target.value}) }
                         id="filled-multiline-static"
                         label="Pickup location"
                         multiline
                         rows="2"
                         margin="dense"
                         variant="outlined"
-                        
                     />
+
                     <TextField
+                        onChange = {(e)=>setValues({drop:e.target.value}) }
                         id="filled-multiline-static"
                         label="Drop location"
                         multiline
@@ -72,6 +95,7 @@ const Step1 = ({auction : {items}}) => {
                     <Grid container spacing={1}>
                         <Grid item xs>
                             <TextField
+                                onChange = {(e)=>setValues({startingPrice:e.target.value}) }
                                 id="filled-multiline-static"
                                 label="Starting price"
                                 margin="dense"
@@ -89,6 +113,7 @@ const Step1 = ({auction : {items}}) => {
                         </Grid>
                         <Grid item xs>
                             <TextField
+                                onChange = {(e)=>setValues({minDecrement:e.target.value}) }
                                 id="filled-multiline-static"
                                 label="Min decrement"
                                 margin="dense"
@@ -99,7 +124,7 @@ const Step1 = ({auction : {items}}) => {
                                 label="Time"
                                 ampm={false}
                                 margin="dense"
-                                // onChange={this.handleTime}
+                                onChange={handleTime}
                                 inputVariant="outlined"
                                 
                             />

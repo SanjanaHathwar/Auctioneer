@@ -3,7 +3,7 @@ import Axios from "axios";
 
 export const getItem = () => async dispatch =>{
     try {
-        const res= await Axios.get('/item/fetchAll')
+        const res= await Axios.get('http://192.168.33.134:3004/item/fetchAll')
         dispatch({
             type: GET_ITEM,
             payload: res.data
@@ -18,7 +18,7 @@ export const getItem = () => async dispatch =>{
 
 export const getBidders = () =>async dispatch => {
     try {
-        const res = await Axios.get(`/supplier/fetchAll`)
+        const res = await Axios.get(`http://192.168.33.134:3004/supplier/fetchAll`)
         dispatch({
             type: GET_BIDDERS,
             payload: res.data
@@ -27,6 +27,15 @@ export const getBidders = () =>async dispatch => {
         dispatch({
             type: GET_BIDDERS_FAIL
         })
+        
+    }
+}
+
+
+export const getActiveAuctions = () => async dispatch => {
+    try {
+        const res = await Axios.get(`http://192.168.33.134:3004/auction/open`)
+    } catch (error) {
         
     }
 }

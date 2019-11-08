@@ -20,7 +20,8 @@ const useStyles = makeStyles({
     },
     paper: {
         background: "#fff",
-        backgroundColor: "rgba(255,255,255,0.75)"
+        backgroundColor: "rgba(255,255,255,0.75)",
+        width: "100%"
     },
     backdrop: {
         
@@ -32,7 +33,7 @@ const useStyles = makeStyles({
 });
 
 function getSteps() {
-    return ['step1', 'step2', 'step3']
+    return ['step1', 'step2']
 }
   
 function getStepContent(stepIndex) {
@@ -41,8 +42,6 @@ function getStepContent(stepIndex) {
             return <Step1/>;
         case 1:
             return <Step2/>;
-        case 2:
-            return 'This is the bit I really care about!';
         default:
             return 'Unknown stepIndex';
     }
@@ -65,6 +64,7 @@ const CreateAuction = ({getItem,getBidders}) => {
 
     const handleClickOpen = () => {
         setOpen(true);
+        getBidders()
     };
 
     const handleClose = () => {
@@ -74,15 +74,18 @@ const CreateAuction = ({getItem,getBidders}) => {
     //call item action
     useEffect(()=>{
         getItem()
-        getBidders()
-    },[getItem,getBidders],[])
+    },[getItem])
+
+    
+
+
 
     
     return (
         <div>
             <img src={Create} alt="" style={{width:40,height:40}} onClick={handleClickOpen} />
             <Dialog 
-                maxWidth ='sm'
+                // maxWidth ='sm'
                 fullWidth= {true}
                 BackdropProps={{
                     classes: {
@@ -155,7 +158,7 @@ CreateAuction.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    
+
 })
 
 export default connect(mapStateToProps,{getItem,getBidders})(CreateAuction)
